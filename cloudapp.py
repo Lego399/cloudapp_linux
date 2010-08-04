@@ -16,10 +16,6 @@ mycloud.auth('email', 'password')
 
 print "Connected."
 
-# mycloud.list_items()
-# for arg in sys.argv[1:]:
-#	mycloud.upload_file(arg)
-
 class AppIndicatorExample:
     def __init__(self):
         self.ind = appindicator.Indicator("cloudapp", "cloudapp-idle-black", appindicator.CATEGORY_APPLICATION_STATUS)
@@ -27,15 +23,13 @@ class AppIndicatorExample:
         self.ind.set_attention_icon("cloudapp-uploading-black")
         self.ind.set_icon("cloudapp-idle-black")
 
-	# define functions
-
 	def matchRegex(rawdata):
 		txt = rawdata
-		re1='.*?'	# Non-greedy match on filler
-		re2='(http)'	# Word 1
-		re3='(:)'	# Any Single Character 1
-		re4='(\\/)'	# Any Single Character 2
-		re5='((?:\\/[\\w\\.\\-]+)+)'	# Unix Path 1
+		re1='.*?'	
+		re2='(http)'	
+		re3='(:)'	
+		re4='(\\/)'	
+		re5='((?:\\/[\\w\\.\\-]+)+)'	
 		rg = re.compile(re1+re2+re3+re4+re5,re.IGNORECASE|re.DOTALL)
 		m = rg.search(txt)
 		if m:
@@ -45,26 +39,26 @@ class AppIndicatorExample:
 			unixpath1=m.group(4)
 			url = word1+c1+c2+unixpath1
 			print url
+			os.system("notify-send 'CloudApp' " + url)
 	def upload(filename):
 		self.ind.set_icon("cloudapp-uploading-black")
 		print 'Uploading!'
 		mycloud.upload_file(filename)
 		matchRegex(str(mycloud.list_items(page=1, per_page=1)))
-		os.system("""notify-send 'CloudApp' 'File has been uploaded'""")
 		self.ind.set_icon("cloudapp-success-black")
 		print 'Success!'
 		time.sleep(5)
 		self.ind.set_icon("cloudapp-idle-black")
-		#os.system("rm " + filename)
+		os.system("rm " + filename)
 		print 'Back to idle'
 		
 	def uploadSelective():
-		t = datetime.now().strftime(namingscheme) # .strftime("%H_%M_%S_%d-%m-%Y")
+		t = datetime.now().strftime("%H_%M_%S_%d-%m-%Y")
 		os.system("scrot -s " + t + ".png")
 		upload(t + ".png")
 
 	def uploadScreenshot():
-		t = datetime.now().strftime(namingscheme) #.strftime("%H_%M_%S_%d-%m-%Y")
+		t = datetime.now().strftime("%H_%M_%S_%d-%m-%Y")
 		time.sleep(2)
 		os.system("scrot " + t + ".png")
 		upload(t + ".png")
@@ -98,10 +92,8 @@ class AppIndicatorExample:
 	def uploadfile_callback(widget=None, data=None):
 		uploadFile()
 
-        # create a menu
         self.menu = gtk.Menu()
 
-        # create items for the menu - labels, checkboxes, radio buttons and images are supported:
 	upfile = gtk.MenuItem("Upload File...")
 	upfile.connect("activate", uploadfile_callback)
 	upfile.show()
