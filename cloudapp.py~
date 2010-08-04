@@ -1,0 +1,42 @@
+import gobject
+import gtk
+import appindicator
+import sys
+import pynotify
+from pycloudapp.cloud import Cloud
+mycloud = Cloud()
+mycloud.auth('lego399@gmail.com', 'CdE33345tG')
+# mycloud.list_items()
+# for arg in sys.argv[1:]:
+#	mycloud.upload_file(arg)
+
+if __name__ == "__main__":
+	ind = appindicator.Indicator ("example-simple-client", "indicator-messages", appindicator.CATEGORY_APPLICATION_STATUS)
+	ind.set_status (appindicator.STATUS_ACTIVE)
+	ind.set_attention_icon ("indicator-messages-new")
+
+  # create a menu
+menu = gtk.Menu()
+
+class Menu:
+	def screenshot(n):
+		a, b = 0, 1
+		while a < n:
+			print a,
+			a, b = b, a+b 
+ 
+uploaditem = "Test"
+
+menu_items = gtk.MenuItem(uploaditem)
+menu.append(menu_items)
+
+    # this is where you would connect your menu item up with a function:
+    
+menu_items.connect("activate", Menu.screenshot(100), uploaditem)
+
+    # show the items
+menu_items.show()
+
+ind.set_menu(menu)
+
+gtk.main()
